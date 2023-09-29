@@ -144,36 +144,36 @@ std::unordered_map<std::string, dataContanier> groupDistance(dataContanier& inDa
 	for (int i = 0; i < inData.data.size(); i++) {
 		auto dis = std::sqrt(std::pow(inData.data[i].getCoord().x, 2) + std::pow(inData.data[i].getCoord().y, 2));
 		if (dis < 100) {
-			auto ptr = result.find("100");
+			auto ptr = result.find("До 100");
 			if (ptr == result.end()) {
-				result["100"] = dataContanier(inData.data[i]);
+				result["До 100"].addObject(inData.data[i]);
 			}
 			else {
 				ptr->second.addObject(inData.data[i]);
 			}
 		}
 		else if (dis < 1000) {
-			auto ptr = result.find("1000");
+			auto ptr = result.find("До 1000");
 			if (ptr == result.end()) {
-				result["1000"] = dataContanier(inData.data[i]);
+				result["До 1000"].addObject(inData.data[i]);
 			}
 			else {
 				ptr->second.addObject(inData.data[i]);
 			}
 		}
 		else if (dis < 10000) {
-			auto ptr = result.find("10000");
+			auto ptr = result.find("До 10000");
 			if (ptr == result.end()) {
-				result["10000"] = dataContanier(inData.data[i]);
+				result["До 10000"].addObject(inData.data[i]);
 			}
 			else {
 				ptr->second.addObject(inData.data[i]);
 			}
 		}
 		else {
-			auto ptr = result.find("inf");
+			auto ptr = result.find("Далеко");
 			if (ptr == result.end()) {
-				result["inf"] = dataContanier(inData.data[i]);
+				result["Далеко"].addObject(inData.data[i]);;
 			}
 			else {
 				ptr->second.addObject(inData.data[i]);
@@ -191,7 +191,7 @@ std::unordered_map<char, dataContanier> groupName(dataContanier& inData) {
 		if (curSym > 'а' && curSym < 'я' || curSym > 'А' && curSym < 'Я') {
 			auto ptr = result.find(curSym);
 			if (ptr == result.end()) {
-				result[curSym] = dataContanier(inData.data[i]);
+				result[curSym].addObject(inData.data[i]);
 			}
 			else {
 				ptr->second.addObject(inData.data[i]);
@@ -199,7 +199,7 @@ std::unordered_map<char, dataContanier> groupName(dataContanier& inData) {
 		}
 		else if (hashCreate) {
 			hashCreate = false;
-			result['#'] = dataContanier(inData.data[i]);
+			result['#'].addObject(inData.data[i]);
 		}
 		else {
 			result['#'].addObject(inData.data[i]);
@@ -213,7 +213,7 @@ std::unordered_map<std::string, dataContanier> groupType(dataContanier& inData, 
 	for (int i = 0; i < inData.data.size(); i++) {
 		auto ptr = result.find(inData.data[i].getType());
 		if (ptr == result.end()) {
-			result[inData.data[i].getType()] = dataContanier(inData.data[i]);
+			result[inData.data[i].getType()].addObject(inData.data[i]);
 		}
 		else {
 			ptr->second.addObject(inData.data[i]);
@@ -248,24 +248,31 @@ std::unordered_map<std::string, dataContanier> groupTime(dataContanier& inData) 
 	for (int i = 0; i < inData.data.size(); i++) {
 		std::tm time = inData.data[i].getTime();
 		std::time_t now = std::time(nullptr);
+		
+		if (std::mktime(&time) > now) {
+			std::cout << "log: invalid time in index " << i << " \n";
+			continue;
+		}
 		std::tm* now_tm = std::localtime(&now);
-		std::cout << "Now: " << now_tm->tm_mday << " " << now_tm->tm_mon << " " << now_tm->tm_year << std::endl;
-		std::cout << "Time: " << time.tm_mday << " " << time.tm_mon << " " << time.tm_year << std::endl;
 		now = std::mktime(now_tm);
 		if ((time.tm_mday == now_tm->tm_mday) && (time.tm_mon == now_tm->tm_mon) && (time.tm_year == now_tm->tm_year)) {
-			std::cout << "Сегодня\n";
+			result["Сегодня"].addObject(inData.data[i]);
 		}
-		else if ((time.tm_mday == now_tm->tm_mday - 1) && (time.tm_mon == now_tm->tm_mon + 1) && (time.tm_year == now_tm->tm_year + 1900)) {
-			std::cout << "Вчера\n";
+		else if ((time.tm_mday == now_tm->tm_mday - 1) && (time.tm_mon == now_tm->tm_mon) && (time.tm_year == now_tm->tm_year)) {
+			result["Вчера"].addObject(inData.data[i]);
 		}
-		//else if ((this->mounth == (local->tm_mon + 1)) && (this->year == (local->tm_year + 1900))) {
-		//	std::cout << "На этой неделе\n";
-		//}
-		//else if ((this->year == (local->tm_year + 1900))) {
-		//	std::cout << "В этом месяце\n";
-		//}
-
-		
+		else if ((now_tm->tm_mday - time.tm_mday < 7) && (now_tm->tm_wday - time.tm_wday > 0)) {
+			result["На этой неделе"].addObject(inData.data[i]);
+		}
+		else if ((time.tm_mon == now_tm->tm_mon) && (time.tm_year == now_tm->tm_year)) {
+			result["В этом месяце"].addObject(inData.data[i]);
+		}
+		else if (time.tm_year == now_tm->tm_year) {
+			result["В этом году"].addObject(inData.data[i]);
+		}
+		else {
+			result["Ранее"].addObject(inData.data[i]);
+		}	
 	}
 	return result;
 }

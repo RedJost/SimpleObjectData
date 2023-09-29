@@ -24,6 +24,6 @@ public:
 
 	friend std::unordered_map<std::string, dataContanier> groupDistance(dataContanier& inData);
 	friend std::unordered_map<char, dataContanier> groupName(dataContanier& inData);
-	friend std::unordered_map<std::string, dataContanier> groupType(dataContanier& inData, int N = 1);
+	friend std::unordered_map<std::string, dataContanier> groupType(dataContanier& inData, int N = 2);
 	friend std::unordered_map<std::string, dataContanier> groupTime(dataContanier& inData);
 }; 

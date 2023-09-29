@@ -1,0 +1,52 @@
+{
+  "version": 3,
+  "configurePresets": [
+    {
+      "name": "x86-release",
+      "inherits": [
+        "x86-debug",
+        "_x86-release",
+        "Qt-Default"
+      ]
+    },
+    {
+      "name": "x86-debug",
+      "inherits": [
+        "windows-base",
+        "_x86-debug",
+        "Qt-Default"
+      ]
+    },
+    {
+      "name": "x64-release",
+      "inherits": [
+        "x64-debug",
+        "_x64-release",
+        "Qt-Default"
+      ]
+    },
+    {
+      "name": "x64-debug",
+      "inherits": [
+        "windows-base",
+        "_x64-debug",
+        "Qt-Default"
+      ]
+    },
+    {
+      "hidden": true,
+      "name": "Qt-Default",
+      "inherits": null,
+      "vendor": {
+        "qt-project.org/Default": {
+          "checksum": "VoalogTkyWuFomeO1TLFx0olLJ4="
+        }
+      }
+    }
+  ],
+  "vendor": {
+    "qt-project.org/Presets": {
+      "checksum": "NczT3nnFFsS+p/Iv8bN+8sa5yvo="
+    }
+  }
+}
