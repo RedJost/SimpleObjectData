@@ -1,5 +1,7 @@
 ﻿#include <dataContanier.h>
 
+
+
 std::tm createTime(int day, int mounth, int year, int hour = 6, int min = 45, int sec = 45, int spec = 1) {
     std::tm res{};
     if (year < 1900) {
@@ -51,5 +53,6 @@ int main() {
     }
     system("pause");
 }
+
 
 
