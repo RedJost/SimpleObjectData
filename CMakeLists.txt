@@ -28,6 +28,8 @@ set(PROJECT_SOURCES
 
 qt_add_executable(QtdataFilter ${PROJECT_SOURCES})
 
+target_include_directories (QtdataFilter PUBLIC src include)
+
 set_target_properties(QtdataFilter
     PROPERTIES
         WIN32_EXECUTABLE TRUE

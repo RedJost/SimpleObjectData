@@ -2,6 +2,7 @@
 
 #include <QtWidgets/QMainWindow>
 #include "ui_QtdataFilter.h"
+#include "ui_add.h"
 
 class QtdataFilter : public QMainWindow
 {
