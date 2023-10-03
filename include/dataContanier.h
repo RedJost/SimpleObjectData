@@ -18,7 +18,7 @@ public:
 	void deleteObject(int index);
 	void showObjects() const;
 	void outputData(std::string infileName) const;
-	void outputData() const;
+	void inputData(std::string infileName);
 	void sort(std::string format);
 	void clear();
 	int size();

@@ -101,9 +101,47 @@ void dataContainer::outputData(std::string infileName) const {
 	}
 }
 
-void dataContainer::outputData() const {
-	for (auto it : data) {
-		it.showObject();
+void dataContainer::inputData(std::string infileName) {
+	data.clear();
+	std::ifstream file(infileName);
+	if (file.is_open()) {
+		std::string element;
+		dataObject cur;
+		std::string time = "";
+		std::string mounth = "";
+		coordinats a;
+		while (!file.eof()) {
+			for (int i = 0; i < 9; i++) {
+				file >> element;
+				if (i == 0) {
+					cur.setName(element);
+				}
+				else  if (i == 1) {
+					a.x = std::stod(element);
+				}
+				else if (i == 2) {
+					a.y = std::stod(element);
+					cur.setCoord(a);
+				}
+				else if (i == 3) {
+					cur.setType(element);
+				}
+				else if (i == 5) {
+					mounth = mounthStr(element);
+				}
+				else if (i == 6) {
+					time += element + "." + mounth + ".";
+				}
+				else if (i == 8) {
+					time += element;
+					cur.setTime(createTimeFromString(time));
+				}
+			}
+			data.push_back(cur);
+		}
+	}
+	else {
+		std::cout << "log invalid file\n";
 	}
 }
 
