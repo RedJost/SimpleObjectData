@@ -40,6 +40,7 @@ dataContainer::dataContainer(std::string infileName) {
 				else if (i == 8) {
 					time += element;
 					cur.setTime(createTimeFromString(time));
+					time = "";
 				}
 			}
 			data.push_back(cur);
@@ -135,6 +136,7 @@ void dataContainer::inputData(std::string infileName) {
 				else if (i == 8) {
 					time += element;
 					cur.setTime(createTimeFromString(time));
+					time = "";
 				}
 			}
 			data.push_back(cur);

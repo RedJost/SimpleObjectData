@@ -25,6 +25,12 @@ int main() {
     myData.push_back(a7);
     myData.push_back(a8);
     dataContainer bank("bank.txt");
+    bank.showObjects();
+   /* auto a = groupType(bank,2);
+    for (auto it : a) {
+        std::cout << it.first << std::endl;
+        it.second.showObjects();
+    }*/
     std::cout << std::endl;
     system("pause");
 }

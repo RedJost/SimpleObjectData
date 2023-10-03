@@ -52,17 +52,17 @@ std::tm createTimeFromString(std::string date) {
 }
 
 std::string mounthStr(std::string mounth) {
-	if (mounth == "Jan") return "0";
-	if (mounth == "Feb") return "1";
-	if (mounth == "Mar") return "2";
-	if (mounth == "Apr") return "3";
-	if (mounth == "May") return "4";
-	if (mounth == "Jun") return "5";
-	if (mounth == "Jul") return "6";
-	if (mounth == "Aug") return "7";
-	if (mounth == "Sep") return "8";
-	if (mounth == "Oct") return "9";
-	if (mounth == "Nov") return "10";
-	if (mounth == "Dec") return "11";
+	if (mounth == "Jan") return "1";
+	if (mounth == "Feb") return "2";
+	if (mounth == "Mar") return "3";
+	if (mounth == "Apr") return "4";
+	if (mounth == "May") return "5";
+	if (mounth == "Jun") return "6";
+	if (mounth == "Jul") return "7";
+	if (mounth == "Aug") return "8";
+	if (mounth == "Sep") return "9";
+	if (mounth == "Oct") return "10";
+	if (mounth == "Nov") return "11";
+	if (mounth == "Dec") return "12";
 	return "";
 }
