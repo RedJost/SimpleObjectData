@@ -2,25 +2,6 @@
 
 
 
-std::tm createTime(int day, int mounth, int year, int hour = 6, int min = 45, int sec = 45, int spec = 1) {
-    std::tm res{};
-    if (year < 1900) {
-        std::cout << "log: invalid time, year must be more than 1900 \n";
-        year = 2023;
-    }
-    res.tm_year = year - 1900; 
-    res.tm_mon = mounth - 1;
-    res.tm_mday = day; 
-    res.tm_hour = hour;
-    res.tm_min = min;
-    res.tm_sec = sec;
-    res.tm_isdst = spec;
-    return (res);
-}
-
-
-
-
 
 
 
@@ -43,14 +24,14 @@ int main() {
     myData.push_back(a6);
     myData.push_back(a7);
     myData.push_back(a8);
-    dataContanier bank(myData);
+    dataContainer bank("bank.txt");
     bank.outputData();
     std::cout << std::endl;
-    auto a = groupTime(bank);
-    for (auto it : a) {
-        std::cout << it.first << std::endl;
-        it.second.showObjects();
-    }
+    //auto a = groupType(bank,2);
+    //for (auto it : a) {
+    //    std::cout << it.first << std::endl;
+    //    it.second.showObjects();
+    //}
     system("pause");
 }
 

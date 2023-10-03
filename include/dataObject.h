@@ -1,7 +1,5 @@
 #pragma once
-#include <iostream>
-#include <string>
-#include <ctime>
+#include "secondaryFunc.h"
 #include <iomanip>
 
 
