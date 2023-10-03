@@ -11,7 +11,6 @@ dataObject::dataObject() {
 
 }
 
-
 void dataObject::setName(std::string& inName) {
 	this->name = inName;
 }
