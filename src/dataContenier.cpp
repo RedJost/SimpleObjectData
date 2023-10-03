@@ -1,24 +1,76 @@
 #include <dataContanier.h>
 
-dataContanier::dataContanier(){
+dataContainer::dataContainer(){
 }
 
-dataContanier::dataContanier(dataObject& other) {
+dataContainer::dataContainer(std::string infileName) {
+	std::ifstream file(infileName);
+	if (file.is_open()) {
+		std::string element;
+		dataObject cur;
+		std::string time = "";
+		std::string mounth = "";
+		coordinats a;
+		while (!file.eof()) {
+			for (int i = 0; i < 9; i++) {
+				file >> element;
+				if (i == 0) {
+					cur.setName(element);
+				}
+				else  if (i == 1) {
+					a.x = std::stod(element);
+				}
+				else if (i == 2) {
+					a.y = std::stod(element);
+					cur.setCoord(a);
+				}
+				else if (i == 3) {
+					cur.setType(element);
+				}
+				else if (i == 5) {
+					mounth = mounthStr(element);
+				}
+				else if (i == 6) {
+					time += element + "." + mounth + ".";
+				}
+				else if (i == 8) {
+					time += element;
+					cur.setTime(createTimeFromString(time));
+					time = "";
+				}
+			}
+			data.push_back(cur);
+		}
+	}
+	else {
+		std::cout << "log invalid file\n";
+	}
+}
+
+dataContainer::dataContainer(dataObject& other) {
 	this->data.push_back(other);
 }
 
-dataContanier::dataContanier(std::vector<dataObject>& inData) {
+dataContainer::dataContainer(std::vector<dataObject>& inData) {
 	this->data.resize(inData.size());
 	for (int i = 0; i < inData.size(); i++) {
 		data[i] = inData[i];
 	}
 }
 
-void dataContanier::addObject(dataObject& other) {
+void dataContainer::addObject(dataObject& other) {
 	this->data.push_back(other);
 }
 
-void dataContanier::deleteObject(int index) {
+dataObject& dataContainer::getObject(int& index)
+{
+	if (index >= 0 && index < data.size()) {
+		return (data[index]);
+	}
+	return dataObject();
+}
+
+void dataContainer::deleteObject(int index) {
 	if (index < 0 || index >= data.size()) {
 		std::cout << "log: invalid index\n";
 	}
@@ -27,13 +79,13 @@ void dataContanier::deleteObject(int index) {
 	}
 }
 
-void dataContanier::showObjects() const {
+void dataContainer::showObjects() const {
 	for (auto it : data) {
 		it.showObject();
 	}
 }
 
-void dataContanier::outputData(std::string infileName) const {
+void dataContainer::outputData(std::string infileName) const {
 	std::ofstream file(infileName);
 	if (file.is_open()) {
 		
@@ -46,13 +98,52 @@ void dataContanier::outputData(std::string infileName) const {
 	}
 }
 
-void dataContanier::outputData() const {
-	for (auto it : data) {
-		it.showObject();
+void dataContainer::inputData(std::string infileName) {
+	data.clear();
+	std::ifstream file(infileName);
+	if (file.is_open()) {
+		std::string element;
+		dataObject cur;
+		std::string time = "";
+		std::string mounth = "";
+		coordinats a;
+		while (!file.eof()) {
+			for (int i = 0; i < 9; i++) {
+				file >> element;
+				if (i == 0) {
+					cur.setName(element);
+				}
+				else  if (i == 1) {
+					a.x = std::stod(element);
+				}
+				else if (i == 2) {
+					a.y = std::stod(element);
+					cur.setCoord(a);
+				}
+				else if (i == 3) {
+					cur.setType(element);
+				}
+				else if (i == 5) {
+					mounth = mounthStr(element);
+				}
+				else if (i == 6) {
+					time += element + "." + mounth + ".";
+				}
+				else if (i == 8) {
+					time += element;
+					cur.setTime(createTimeFromString(time));
+					time = "";
+				}
+			}
+			data.push_back(cur);
+		}
+	}
+	else {
+		std::cout << "log invalid file\n";
 	}
 }
 
-void dataContanier::sort(std::string format) {
+void dataContainer::sort(std::string format) {
 	if (format == "DistanceDown") {
 		for (int i = 0; i < data.size(); i++) {
 			for (int j = 0; j < data.size(); j++) {
@@ -113,7 +204,7 @@ void dataContanier::sort(std::string format) {
 			}
 		}
 	}
-	else if (format == "TimeUp") {
+	else if (format == "TimeDown") {
 		for (int i = 0; i < data.size(); i++) {
 			for (int j = 0; j < data.size(); j++) {
 				std::time_t timeI = std::mktime(&data[i].getTime());
@@ -131,7 +222,16 @@ void dataContanier::sort(std::string format) {
 	}
 }
 
-dataContanier& dataContanier::operator=(const dataContanier& other) {
+void dataContainer::clear() {
+	data.clear();
+}
+
+int dataContainer::size()
+{
+	return data.size();
+}
+
+dataContainer& dataContainer::operator=(const dataContainer& other) {
 	this->data.resize(other.data.size());
 	for (int i = 0; i < other.data.size(); i++) {
 		this->data[i] = other.data[i];
@@ -139,8 +239,8 @@ dataContanier& dataContanier::operator=(const dataContanier& other) {
 	return *this;
 }
 
-std::unordered_map<std::string, dataContanier> groupDistance(dataContanier& inData) {
-	std::unordered_map<std::string, dataContanier> result;
+std::unordered_map<std::string, dataContainer> groupDistance(dataContainer& inData) {
+	std::unordered_map<std::string, dataContainer> result;
 	for (int i = 0; i < inData.data.size(); i++) {
 		auto dis = std::sqrt(std::pow(inData.data[i].getCoord().x, 2) + std::pow(inData.data[i].getCoord().y, 2));
 		if (dis < 100) {
@@ -183,8 +283,8 @@ std::unordered_map<std::string, dataContanier> groupDistance(dataContanier& inDa
 	return result;
 }
 
-std::unordered_map<char, dataContanier> groupName(dataContanier& inData) {
-	std::unordered_map<char, dataContanier> result;
+std::unordered_map<char, dataContainer> groupName(dataContainer& inData) {
+	std::unordered_map<char, dataContainer> result;
 	bool hashCreate = true;
 	for (int i = 0; i < inData.data.size(); i++) {
 		auto curSym = inData.data[i].getName().at(0);
@@ -208,8 +308,8 @@ std::unordered_map<char, dataContanier> groupName(dataContanier& inData) {
 	return result;
 }
 
-std::unordered_map<std::string, dataContanier> groupType(dataContanier& inData, int N) {
-	std::unordered_map<std::string, dataContanier> result;
+std::unordered_map<std::string, dataContainer> groupType(dataContainer& inData, int N) {
+	std::unordered_map<std::string, dataContainer> result;
 	for (int i = 0; i < inData.data.size(); i++) {
 		auto ptr = result.find(inData.data[i].getType());
 		if (ptr == result.end()) {
@@ -222,7 +322,7 @@ std::unordered_map<std::string, dataContanier> groupType(dataContanier& inData, 
 
 
 	// watch
-	std::vector<dataContanier> dataSave;
+	std::vector<dataContainer> dataSave;
 	for (auto it = result.begin(); it != result.end(); it++) {
 		if ( (it->second.data.size()) < N) {
 			dataSave.push_back(it->second.data);
@@ -233,7 +333,7 @@ std::unordered_map<std::string, dataContanier> groupType(dataContanier& inData, 
 	if (dataSave.empty()) {
 		return result;
 	} 
-	result["Разное"] = dataContanier();
+	result["Разное"] = dataContainer();
 	for (int i = 0; i < dataSave.size(); i++) {
 		for (int j = 0; j < dataSave[i].data.size(); j++) {
 			result["Разное"].addObject(dataSave[i].data[j]);
@@ -243,8 +343,8 @@ std::unordered_map<std::string, dataContanier> groupType(dataContanier& inData, 
 	
 }
 
-std::unordered_map<std::string, dataContanier> groupTime(dataContanier& inData) {
-	std::unordered_map<std::string, dataContanier> result;
+std::unordered_map<std::string, dataContainer> groupTime(dataContainer& inData) {
+	std::unordered_map<std::string, dataContainer> result;
 	for (int i = 0; i < inData.data.size(); i++) {
 		std::tm time = inData.data[i].getTime();
 		std::time_t now = std::time(nullptr);
